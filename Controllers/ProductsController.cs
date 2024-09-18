@@ -50,7 +50,7 @@ namespace ProductsApiRest.Controllers
             }
         }
 
-        //Obtener un producto por su id GET: api/Productos/{id}
+        //Obtener un producto por su id GET: api/Products/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse<Product>>> GetProducto(int id)
         {
@@ -84,6 +84,39 @@ namespace ProductsApiRest.Controllers
                     Status = false,
                     Message = $"Ha ocurrido un error al obtener producto: {ex.Message}",
                 });
+            }
+        }
+
+        //Agregar un nuevo producto POST: api/Products
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<Product>>> PostProducto(Product product)
+        {
+            try
+            {
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                var response = new ApiResponse<Product> //Respuesta al guardarse correctamente
+                {
+                    Code = 0,
+                    Status = true,
+                    Message = "Se ha agregado el producto correctamente",
+                    Data = product
+                };
+
+                return CreatedAtAction(nameof(GetProducto), new { id = product.Id }, response); //Retorna respuesta junto al producto que se añadió
+            }
+            catch (Exception ex)
+            {
+                var response = new ApiResponse<Product> //Respuesta para errores
+                {
+                    Code = 2,
+                    Status = false,
+                    Message = $"No fue posible agregar el producto: {ex.Message}",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
             }
         }
     }

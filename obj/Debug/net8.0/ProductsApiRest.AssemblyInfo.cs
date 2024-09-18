@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProductsApiRest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82606858f438d6d75a697f9dcfdc7dc6591251b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b21ac76aa35f1742a79888431120f8aa6e6edcb")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProductsApiRest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProductsApiRest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
