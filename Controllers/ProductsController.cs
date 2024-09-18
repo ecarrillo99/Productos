@@ -5,11 +5,11 @@ using ProductsApiRest.Models;
 
 namespace ProductsApiRest.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //Definir rutas, en este caso se usa el nombre del controlador
     [ApiController]
     public class ProductsController(ApplicationDbContext context) : ControllerBase
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly ApplicationDbContext _context = context; //Crear instancia del contexto de la BD
 
         //obtener lista de productos GET: api/Products
         [HttpGet]
@@ -209,6 +209,7 @@ namespace ProductsApiRest.Controllers
             }
         }
 
+        //Función para verificar si un producto existe
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
