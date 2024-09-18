@@ -113,11 +113,59 @@ namespace ProductsApiRest.Controllers
                     Code = 2,
                     Status = false,
                     Message = $"No fue posible agregar el producto: {ex.Message}",
-                    Data = null
                 };
 
                 return StatusCode(500, response);
             }
+        }
+
+        //Actualizar producto por ID PUT: api/Productos/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<Product>>> PutProducto(int id, Product product)
+        {
+
+            try
+            {
+                _context.Entry(product).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<Product>
+                {
+                    Code = 0,
+                    Status = true,
+                    Message = "Producto actualizado correctamente",
+                    Data = product
+                });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound(new ApiResponse<Product>
+                    {
+                        Code = 1,
+                        Status = false,
+                        Message = "El producto a modificar no existe",
+                    });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<Product>
+                {
+                    Code = 2,
+                    Status = false,
+                    Message = $"Ha ocurrido un error al actualizar producto: {ex.Message}",
+                });
+            }
+        }
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }
