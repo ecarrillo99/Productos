@@ -123,13 +123,35 @@ namespace ProductsApiRest.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ApiResponse<Product>>> PutProducto(int id, Product product)
         {
+            // Verifica si el producto existe antes de intentar actualizar
+            if (!ProductExists(id))
+            {
+                return NotFound(new ApiResponse<Product>
+                {
+                    Code = 1,
+                    Status = false,
+                    Message = "El producto a modificar no existe",
+                    Data = null
+                });
+            }
+
+            if (id != product.Id)// Verifica si el ID proporcionado coincide con el del producto
+            {
+                return BadRequest(new ApiResponse<Product>
+                {
+                    Code = 1,
+                    Status = false,
+                    Message = "El ID del producto no coincide con el ID proporcionado",
+                });
+            }
 
             try
             {
+                // Marca el producto como modificado
                 _context.Entry(product).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return Ok(new ApiResponse<Product>
+                return Ok(new ApiResponse<Product> // Respuesta para actualización correcta
                 {
                     Code = 0,
                     Status = true,
@@ -137,25 +159,9 @@ namespace ProductsApiRest.Controllers
                     Data = product
                 });
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound(new ApiResponse<Product>
-                    {
-                        Code = 1,
-                        Status = false,
-                        Message = "El producto a modificar no existe",
-                    });
-                }
-                else
-                {
-                    throw;
-                }
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Product>
+                return StatusCode(500, new ApiResponse<Product> // Respuesta para errores
                 {
                     Code = 2,
                     Status = false,
@@ -163,6 +169,46 @@ namespace ProductsApiRest.Controllers
                 });
             }
         }
+
+        //Eliminar producto por ID DELETE: api/Productos/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiResponse<Product>>> DeleteProducto(int id)
+        {
+            try
+            {
+                if (!ProductExists(id)) // Verifica si el producto existe 
+                {
+                    return NotFound(new ApiResponse<Product>
+                    {
+                        Code = 1,
+                        Status = false,
+                        Message = "No existe el producto a eliminar",
+                    });
+                }
+
+                var product = new Product { Id = id }; //Crear instancia de producto con el id a eliminar
+
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<Product> //Respuesta para eliminación correcta
+                {
+                    Code = 0,
+                    Status = true,
+                    Message = "Producto eliminado correctamente",
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<Product> //Resueta para errores
+                {
+                    Code = 2,
+                    Status = false,
+                    Message = $"Ha ocurrido un error al eliminar el producto: {ex.Message}",
+                });
+            }
+        }
+
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
