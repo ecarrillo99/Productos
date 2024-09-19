@@ -20,12 +20,16 @@ namespace ProductsApiRest.Controllers
                 var products = await _context.Products.ToListAsync();
                 if (products.Count > 0) //Se verifica que la lista de productos no esté vacia
                 {
-                    return Ok(new ApiResponse<List<Product>> //Mensaje de OK cuando se tienen Datos
+                    return Ok(new ApiResponse<ListData<List<Product>>> //Mensaje de OK cuando se tienen Datos
                     {
                         Code = 0,
                         Status = true,
                         Message = "Se ha listado correctamente",
-                        Data = products
+                        Data = new ListData<List<Product>>
+                        {
+                            Items = products.ToList(),
+                            TotalItems = products.Count,
+                        }
                     });
                 }
                 else
@@ -191,11 +195,12 @@ namespace ProductsApiRest.Controllers
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
 
-                return Ok(new ApiResponse<Product> //Respuesta para eliminación correcta
+                return Ok(new ApiResponse<int> //Respuesta para eliminación correcta
                 {
                     Code = 0,
                     Status = true,
                     Message = "Producto eliminado correctamente",
+                    Data=id
                 });
             }
             catch (Exception ex)
