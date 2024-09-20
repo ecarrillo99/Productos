@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class BaseController : ControllerBase
+public class BaseFilterController : ControllerBase
 {
     public async Task<ActionResult<ApiResponse<ListData<List<T>>>>> GetEntities<T>(
         IQueryable<T> query,

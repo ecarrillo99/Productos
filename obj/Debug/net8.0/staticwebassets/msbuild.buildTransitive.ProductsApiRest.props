@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="..\buildMultiTargeting\ProductsApiRest.props" />
+  <Import Project="../buildMultiTargeting/ProductsApiRest.props" />
 </Project>

@@ -2971,19 +2971,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\edi_1\\.nuget\\packages\\": {}
+    "/Users/aracnocia.ltda./.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\edi_1\\OneDrive\\Documentos\\Proyectos\\ProductsApiRest\\ProductsApiRest.csproj",
+      "projectUniqueName": "/Users/aracnocia.ltda./Documents/Edisson/Productos/ProductsApiRest.csproj",
       "projectName": "ProductsApiRest",
-      "projectPath": "C:\\Users\\edi_1\\OneDrive\\Documentos\\Proyectos\\ProductsApiRest\\ProductsApiRest.csproj",
-      "packagesPath": "C:\\Users\\edi_1\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\edi_1\\OneDrive\\Documentos\\Proyectos\\ProductsApiRest\\obj\\",
+      "projectPath": "/Users/aracnocia.ltda./Documents/Edisson/Productos/ProductsApiRest.csproj",
+      "packagesPath": "/Users/aracnocia.ltda./.nuget/packages/",
+      "outputPath": "/Users/aracnocia.ltda./Documents/Edisson/Productos/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\edi_1\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/aracnocia.ltda./.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3054,7 +3054,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
