@@ -12,7 +12,7 @@ public class BaseFilterController : ControllerBase
         int page = 1,
         int pageSize = 10,
         Dictionary<string, string> filters = null,
-        string sortBy = null,
+        string sortBy = "Id",
         string sortDirection = "asc" // "asc" por defecto
     ) 
     {

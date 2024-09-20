@@ -13,7 +13,7 @@ namespace ProductsApiRest.Controllers
             int page = 1,
             int pageSize = 10,
             [FromQuery] Dictionary<string, string> filters = null,
-            string sortBy = null,
+            string sortBy = "Id",
             string sortDirection = "asc")
         {
             var query = _context.Products.Include(p => p.Warehouse).AsQueryable();
