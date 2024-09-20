@@ -7,12 +7,12 @@ namespace ProductsApiRest.Controllers
 {
     [Route("api/[controller]")] //Definir rutas, en este caso se usa el nombre del controlador
     [ApiController]
-    public class ProductsController(ApplicationDbContext context) : ControllerBase
+    public class ProductsController(ApplicationDbContext context) : BaseController
     {
         private readonly ApplicationDbContext _context = context; //Crear instancia del contexto de la BD
 
         //obtener lista de productos GET: api/Products
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<ApiResponse<List<Product>>>> GetProducts()
         {
             try
@@ -36,6 +36,18 @@ namespace ProductsApiRest.Controllers
             {
                 return StatusCode(500, ApiResponse<List<Product>>.Error("Ha ocurrido un error al listar: {ex.Message}", 2)); //Mensaje de error al suceder excepciones
             }
+        }*/
+
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<ListData<List<Product>>>>> GetProducts(
+            int page = 1,
+            int pageSize = 10,
+            [FromQuery] Dictionary<string, string> filters = null,
+            string sortBy = null,
+            string sortDirection = "asc")
+        {
+            var productsQuery = _context.Products.AsQueryable();
+            return await GetEntities(productsQuery, page, pageSize, filters, sortBy, sortDirection);
         }
 
         //Obtener un producto por su id GET: api/Products/{id}
@@ -50,7 +62,7 @@ namespace ProductsApiRest.Controllers
                 {
                     return NotFound(ApiResponse<Product>.Error("No existe producto con el id especificado", 1)); //Respuesta si el producto con el id ingresado no existe
                 }
-                return Ok(ApiResponse<Product>.Ok(product,"Producto obtenido correctamente", 0)); //Respuesta si el producto con el id ingresado existe
+                return Ok(ApiResponse<Product>.Ok(product, "Producto obtenido correctamente", 0)); //Respuesta si el producto con el id ingresado existe
             }
             catch (Exception ex)
             {
@@ -66,7 +78,7 @@ namespace ProductsApiRest.Controllers
             {
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-                var response = ApiResponse<Product>.Ok(product,"Se ha agregado el producto correctamente", 0);
+                var response = ApiResponse<Product>.Ok(product, "Se ha agregado el producto correctamente", 0);
 
                 return CreatedAtAction(nameof(GetProducto), new { id = product.Id }, response); //Retorna respuesta junto al producto que se añadió
             }
@@ -83,7 +95,7 @@ namespace ProductsApiRest.Controllers
             // Verifica si el producto existe antes de intentar actualizar
             if (!ProductExists(id))
             {
-                return NotFound(ApiResponse<Product>.Error("El producto a modificar no existe", 1)); 
+                return NotFound(ApiResponse<Product>.Error("El producto a modificar no existe", 1));
             }
 
             if (id != product.Id)// Verifica si el ID proporcionado coincide con el del producto
@@ -96,7 +108,7 @@ namespace ProductsApiRest.Controllers
                 // Marca el producto como modificado
                 _context.Entry(product).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return Ok(ApiResponse<Product>.Ok(product,"Producto actualizado correctamente", 0)); //Mensaje de actualizacion correcta
+                return Ok(ApiResponse<Product>.Ok(product, "Producto actualizado correctamente", 0)); //Mensaje de actualizacion correcta
             }
             catch (Exception ex)
             {
@@ -121,7 +133,7 @@ namespace ProductsApiRest.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return Ok(ApiResponse<int>.Ok(id,"Producto eliminado correctamente", 0)); //Mensaje de eliminación correcta
+                return Ok(ApiResponse<int>.Ok(id, "Producto eliminado correctamente", 0)); //Mensaje de eliminación correcta
             }
             catch (Exception ex)
             {
