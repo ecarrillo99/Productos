@@ -8,7 +8,7 @@ namespace ProductsApiRest.Controllers
     public class ProductsController : BaseCrudController<Product>
     {
         public ProductsController(ApplicationDbContext context) : base(context) { }
-        // Obtener lista de productos con sus almacenes
+        // Obtener lista de productos con sus bodegas
         public override async Task<ActionResult<ApiResponse<ListData<List<Product>>>>> GetEntities(
             int page = 1,
             int pageSize = 10,
@@ -16,13 +16,21 @@ namespace ProductsApiRest.Controllers
             string sortBy = "Id",
             string sortDirection = "asc")
         {
-            var query = _context.Products.Include(p => p.Warehouse).AsQueryable();
+            var query = _context.Products.Include(p => p.Warehouse).AsQueryable(); //Peticion con filtros
+
+            // Manejo especial para IdWarehouse
+            if (filters != null && filters.ContainsKey("IdWarehouse"))
+            {
+                var warehouseFilter = filters["IdWarehouse"];
+                filters["IdWarehouse"] = $"{warehouseFilter},{warehouseFilter}"; // Convierte a rango
+            }
 
             // Llamar al método de filtrado y ordenamiento del controlador base
             var response = await base.GetEntities(query, page, pageSize, filters, sortBy, sortDirection);
 
             return response;
         }
+
 
         protected override bool EntityExists(int id)
         {

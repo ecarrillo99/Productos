@@ -15,7 +15,9 @@ namespace ProductsApiRest.Models
 
         public double Price {get; set;}
 
-        public double Stock {get; set;}
+        public int Stock {get; set;}
+
+        public DateTime Created {get; set;}
     
         public int IdWarehouse { get; set; }// Relación con Bodega
 
